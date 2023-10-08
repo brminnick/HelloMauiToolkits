@@ -6,20 +6,14 @@ namespace HelloMauiToolkits;
 partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
 {
 	const string tapButtonText_Start = "Start", tapButtonText_Tap = "Tap!";
-
-	readonly WeakEventManager weakEventManager = new();
 	
 	[ObservableProperty]
-	int tapCount, highScore = tapCountService.TapCountHighScore, timerSeconds;
+	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = 5;
 
 	[ObservableProperty]
 	string tapButtonText = tapButtonText_Start;
 
-	public event EventHandler<GameEndedEventArgs> GameEnded
-	{
-		add => weakEventManager.AddEventHandler(value);
-		remove => weakEventManager.RemoveEventHandler(value);
-	}
+	public event EventHandler<GameEndedEventArgs>? GameEnded;
 
 	[RelayCommand]
 	void StartButtonTapped()
@@ -47,13 +41,17 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		timer.Tick += HandleTimerTicked;
 		
 		TapCount = 0;
+		
+		timer.Start();
 	}
 
 	void EndGame(int score)
 	{
-		TimerSeconds = 0;
+		TimerSecondsRemaining = 5;
+
+		TapButtonText = tapButtonText_Start;
 		
-		OnGameEnded(score);
+		GameEnded?.Invoke(this, new GameEndedEventArgs(score));
 
 		if (score > tapCountService.TapCountHighScore)
 		{
@@ -64,13 +62,12 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 	
 	void HandleTimerTicked(object? sender, EventArgs e)
 	{
-		TimerSeconds++;
+		TimerSecondsRemaining--;
 
-		if (TimerSeconds >= 5)
+		if (TimerSecondsRemaining == 0 && sender is IDispatcherTimer timer)
 		{
+			timer.Stop();
 			EndGame(TapCount);
 		}
 	}
-
-	void OnGameEnded(int score) => weakEventManager.HandleEvent(this, new GameEndedEventArgs(score), nameof(GameEndedEventArgs));
 }

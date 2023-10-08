@@ -2,8 +2,8 @@ namespace HelloMauiToolkits;
 
 class App : Application
 {
-	public App(AppShell shell)
+	public App(AppShell appShell)
 	{
-		MainPage = shell;
+		MainPage = appShell;
 	}
 }

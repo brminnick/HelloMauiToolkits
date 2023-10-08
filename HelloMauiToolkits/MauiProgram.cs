@@ -28,6 +28,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<App>();
 		builder.Services.AddSingleton<AppShell>();
 		builder.Services.AddSingleton<TapCountService>();
+		builder.Services.AddSingleton<IPreferences>(Preferences.Default);
 		
         return builder.Build();
     }

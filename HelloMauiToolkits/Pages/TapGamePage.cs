@@ -50,7 +50,8 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Center()
 					.Bind(Button.TextProperty, 
 							static (TapGameViewModel vm) => vm.TapButtonText, 
-							mode: BindingMode.OneWay),
+							mode: BindingMode.OneWay)
+					.BindCommand(static (TapGameViewModel vm) => vm.StartButtonTappedCommand, mode: BindingMode.OneTime),
 				
 				new Label()
 					.Row(Row.TapCounter)
@@ -65,7 +66,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Center()
 					.TextCenter()
 					.Bind(Label.TextProperty, 
-							static (TapGameViewModel vm) => vm.TimerSeconds,
+							static (TapGameViewModel vm) => vm.TimerSecondsRemaining,
 							mode: BindingMode.OneWay,
 							convert: seconds => $"Seconds Remaining: {seconds}")
 			}
