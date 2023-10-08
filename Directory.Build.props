@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	<PropertyGroup>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+	</PropertyGroup>
+</Project>
