@@ -2,12 +2,8 @@
 
 namespace HelloMauiToolkits;
 
-abstract class BasePage<TViewModel> : BasePage where TViewModel : BaseViewModel
+abstract class BasePage<TViewModel>(TViewModel viewModel) : BasePage(viewModel) where TViewModel : BaseViewModel
 {
-	protected BasePage(TViewModel viewModel) : base(viewModel)
-	{
-	}
-
 	public new TViewModel BindingContext => (TViewModel)base.BindingContext;
 }
 

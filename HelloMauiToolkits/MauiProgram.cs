@@ -9,6 +9,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+		
         builder.UseMauiApp<App>()
 				.UseMauiCommunityToolkit()
 				.UseMauiCommunityToolkitMarkup()
@@ -23,8 +24,10 @@ public static class MauiProgram
 		// Add Pages + ViewModels
 		builder.Services.AddTransientWithShellRoute<TapGamePage, TapGameViewModel>();
 		
+		// Add Services
 		builder.Services.AddSingleton<App>();
 		builder.Services.AddSingleton<AppShell>();
+		builder.Services.AddSingleton<TapCountService>();
 		
         return builder.Build();
     }
