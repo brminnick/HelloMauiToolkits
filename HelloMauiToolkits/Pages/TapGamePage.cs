@@ -18,9 +18,11 @@ class TapGamePage : BasePage<TapGameViewModel>
 
 		Content = new Grid
 		{
+			RowSpacing = 12,
+			
 			RowDefinitions = Rows.Define(
-				(Row.HighScore, 44),
-				(Row.Description, 24),
+				(Row.HighScore, 52),
+				(Row.Description, 108),
 				(Row.TapButton, Star),
 				(Row.TapCounter, 32),
 				(Row.Timer, 32)),
@@ -37,16 +39,19 @@ class TapGamePage : BasePage<TapGameViewModel>
 							mode: BindingMode.OneWay, 
 							convert: number => $"High Score: {number}"),
 				
-				new Label()
+				new Label { LineBreakMode =  LineBreakMode.WordWrap }
 					.Row(Row.Description)
 					.Text("Start the game, then tap the button as many times as you can in 5 seconds!")
 					.Font(size: 24, italic: true)
 					.TextCenter()
 					.Center(),
 				
-				new Button()
+				new ShadowButton()
 					.Row(Row.TapButton)
+					.BackgroundColor(ColorConstants.ButtonBackgroundColor)
+					.TextColor(Colors.White)
 					.Center()
+					.Size(250,250)
 					.Bind(Button.TextProperty, 
 							static (TapGameViewModel vm) => vm.GameButtonText, 
 							mode: BindingMode.OneWay)
@@ -80,12 +85,40 @@ class TapGamePage : BasePage<TapGameViewModel>
 	{
 		Popup popup = e.FinalScore switch
 		{
-			var score when (score > tapCountService.TapCountHighScore) => new GameEndedPopup("New High Score!", score.ToString()),
-			_ => new GameEndedPopup("Game Over", $"You scored {e.FinalScore} points!")
+			var score when (score > tapCountService.TapCountHighScore) => new GameEndedPopup("New High Score!", 
+																									score.ToString(),
+																									GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore)),
+			_ => new GameEndedPopup("Game Over",  
+										$"You scored {e.FinalScore} points!",
+										GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore))
 		};
 		
 		await this.ShowPopupAsync(popup);
 	}
 
 	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
+
+	class ShadowButton : Button
+	{
+		public ShadowButton()
+		{
+			Shadow = new Shadow
+			{
+				Brush = Colors.Black,
+				Radius = 8,
+				Opacity = 0.8f
+			};
+			
+			BorderWidth = 8;
+			BorderColor = ColorConstants.ButtonBorderColor;
+
+			Clicked += HandleClicked;
+		}
+		
+		async void HandleClicked(object? sender, EventArgs e)
+		{
+			await this.ScaleTo(1.1, 100);
+			await this.ScaleTo(1.0, 100);
+		}
+	}
 }
