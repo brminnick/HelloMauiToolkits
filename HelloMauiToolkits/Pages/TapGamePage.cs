@@ -85,11 +85,11 @@ class TapGamePage : BasePage<TapGameViewModel>
 	{
 		Popup popup = e.FinalScore switch
 		{
-			var score when (score > tapCountService.TapCountHighScore) => new GameEndedPopup("New High Score!", 
-																									score.ToString(),
+			var score when (score > tapCountService.TapCountHighScore) => new GameEndedPopup("New High Score", 
+																									e.FinalScore,
 																									GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore)),
 			_ => new GameEndedPopup("Game Over",  
-										$"You scored {e.FinalScore} points!",
+										e.FinalScore,
 										GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore))
 		};
 		

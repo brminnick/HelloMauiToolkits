@@ -8,11 +8,15 @@ namespace HelloMauiToolkits;
 
 class GameEndedPopup : Popup
 {
-	public GameEndedPopup(string title, string description, string scoreEmoji)
+	public GameEndedPopup(string title, int score, string scoreEmoji)
 	{
 		const int titleFontSize = 32;
 		const int descriptionFontSize = 24;
-		const int scoreEmojiSize = 64;
+		const int scoreEmojiFontSize = 64;
+		const int combinedDescriptionLabelEmojiLabelHeight = 175;
+		const int popupWidth = 250;
+		
+		var description = $"You scored {score} points!";
 		
 		VerticalOptions = HorizontalOptions = LayoutAlignment.Center;
 		
@@ -34,30 +38,19 @@ class GameEndedPopup : Popup
 				Spacing = 12,
 				Children =
 				{
-					new Label()
-						.Center()
-						.TextCenter()
-						.Font(size: titleFontSize, bold: true)
-						.Text(title, Colors.Black),
+					new GamedEndedLabel(titleFontSize, title)
+						.Margins(bottom: 8),
 
-					new Label()
-						.Center()
-						.TextCenter()
-						.Font(size: descriptionFontSize)
-						.Text(description, Colors.Black)
+					new GamedEndedLabel(descriptionFontSize, description)
 						.Assign(out Label descriptionLabel),
 					
-					new Label()
-						.Text(scoreEmoji, Colors.Black)
-						.Center()
-						.TextCenter()
-						.Font(size: scoreEmojiSize)
+					new GamedEndedLabel(scoreEmojiFontSize, scoreEmoji)
 						.Bind(Label.HeightRequestProperty, 
 								static (Label descriptionLabel) => descriptionLabel.Height,
-								convert: (double descriptionLabelHeight) => 250 - descriptionLabelHeight,
+								convert: (double descriptionLabelHeight) => combinedDescriptionLabelEmojiLabelHeight - descriptionLabelHeight,
 								source: descriptionLabel)
 				}
-			}.Size(250, -1)
+			}.Size(popupWidth, -1)
 			 .Padding(24)
 		};
 	}
@@ -66,5 +59,16 @@ class GameEndedPopup : Popup
 	{
 		await Task.Delay(TimeSpan.FromSeconds(3));
 		await CloseAsync();
+	}
+
+	class GamedEndedLabel : Label
+	{
+		public GamedEndedLabel(int fontSize, string text)
+		{
+			this.Text(text, Colors.Black)
+				.Center()
+				.TextCenter()
+				.Font(size: fontSize);
+		}
 	}
 }
