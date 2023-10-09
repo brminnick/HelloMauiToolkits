@@ -5,25 +5,26 @@ namespace HelloMauiToolkits;
 
 partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
 {
-	const string tapButtonText_Start = "Start", tapButtonText_Tap = "Tap!";
-	
-	[ObservableProperty]
-	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = 5;
+	const int maximumTimerSeconds = 5;
+	const string gameButtonText_Start = "Start", gameButtonText_Tap = "Tap!";
 
 	[ObservableProperty]
-	string tapButtonText = tapButtonText_Start;
+	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = maximumTimerSeconds;
+
+	[ObservableProperty]
+	string gameButtonText = gameButtonText_Start;
 
 	public event EventHandler<GameEndedEventArgs>? GameEnded;
 
 	[RelayCommand]
-	void StartButtonTapped()
+	void GameButtonTapped(string buttonText)
 	{
-		if (TapButtonText is tapButtonText_Start)
+		if (buttonText is gameButtonText_Start)
 		{
-			TapButtonText = tapButtonText_Tap;
+			GameButtonText = gameButtonText_Tap;
 			StartGame();
 		}
-		else if (TapButtonText is tapButtonText_Tap)
+		else if (buttonText is gameButtonText_Tap)
 		{
 			TapCount++;
 		}
@@ -39,34 +40,37 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		timer.Interval = TimeSpan.FromSeconds(1);
 
 		timer.Tick += HandleTimerTicked;
-		
+
 		TapCount = 0;
-		
+
 		timer.Start();
 	}
 
-	void EndGame(int score)
+	void EndGame(int score)	
 	{
-		TimerSecondsRemaining = 5;
-
-		TapButtonText = tapButtonText_Start;
-		
 		GameEnded?.Invoke(this, new GameEndedEventArgs(score));
 
 		if (score > tapCountService.TapCountHighScore)
 		{
 			HighScore = tapCountService.TapCountHighScore = score;
 		}
+		
+		TimerSecondsRemaining = maximumTimerSeconds;
+		GameButtonText = gameButtonText_Start;
 	}
-	
-	
+
+
 	void HandleTimerTicked(object? sender, EventArgs e)
 	{
 		TimerSecondsRemaining--;
 
-		if (TimerSecondsRemaining == 0 && sender is IDispatcherTimer timer)
+		if (TimerSecondsRemaining == 0)
 		{
-			timer.Stop();
+			var timer = sender as IDispatcherTimer;
+
+			timer?.Stop();
+			timer = null;
+
 			EndGame(TapCount);
 		}
 	}

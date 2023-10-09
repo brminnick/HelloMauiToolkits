@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Maui.Views;
 
@@ -7,6 +8,7 @@ class GameEndedPopup : Popup
 {
 	public GameEndedPopup(string title, string description)
 	{
+		Opened += HandleOpened;
 		CanBeDismissedByTappingOutsideOfPopup = false;
 		
 		Content  = new VerticalStackLayout
@@ -27,5 +29,11 @@ class GameEndedPopup : Popup
 					.Text(description)
 			}
 		};
+	}
+	
+	async void HandleOpened(object? sender, PopupOpenedEventArgs e)
+	{
+		await Task.Delay(TimeSpan.FromSeconds(3));
+		await CloseAsync();
 	}
 }

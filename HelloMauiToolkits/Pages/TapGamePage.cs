@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Maui.Views;
-
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 
 namespace HelloMauiToolkits;
@@ -49,9 +48,13 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Row(Row.TapButton)
 					.Center()
 					.Bind(Button.TextProperty, 
-							static (TapGameViewModel vm) => vm.TapButtonText, 
+							static (TapGameViewModel vm) => vm.GameButtonText, 
 							mode: BindingMode.OneWay)
-					.BindCommand(static (TapGameViewModel vm) => vm.StartButtonTappedCommand, mode: BindingMode.OneTime),
+					.BindCommand(
+							static (TapGameViewModel vm) => vm.GameButtonTappedCommand, 
+							commandBindingMode: BindingMode.OneTime, 
+							parameterGetter: static (TapGameViewModel vm) => vm.GameButtonText, 
+							parameterBindingMode: BindingMode.OneWay),
 				
 				new Label()
 					.Row(Row.TapCounter)
@@ -81,11 +84,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 			_ => new GameEndedPopup("Game Over", $"You scored {e.FinalScore} points!")
 		};
 		
-		this.ShowPopup(popup);
-
-		await Task.Delay(TimeSpan.FromSeconds(3));
-
-		await popup.CloseAsync();
+		await this.ShowPopupAsync(popup);
 	}
 
 	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
