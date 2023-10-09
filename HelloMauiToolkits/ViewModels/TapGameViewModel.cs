@@ -5,26 +5,26 @@ namespace HelloMauiToolkits;
 
 partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
 {
-	const int maximumTimerSeconds = 5;
-	const string gameButtonText_Start = "Start", gameButtonText_Tap = "Tap!";
+	[ObservableProperty]
+	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = GameConstants.GameDuration.Seconds;
 
 	[ObservableProperty]
-	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = maximumTimerSeconds;
+	string gameButtonText = GameConstants.GameButtonText_Start;
 
-	[ObservableProperty]
-	string gameButtonText = gameButtonText_Start;
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(GameButtonTappedCommand))]
+	bool canGameButtonTappedCommandExecute = true;
 
 	public event EventHandler<GameEndedEventArgs>? GameEnded;
 
-	[RelayCommand]
+	[RelayCommand(CanExecute = nameof(CanGameButtonTappedCommandExecute))]
 	void GameButtonTapped(string buttonText)
 	{
-		if (buttonText is gameButtonText_Start)
+		if (buttonText is GameConstants.GameButtonText_Start)
 		{
-			GameButtonText = gameButtonText_Tap;
+			GameButtonText = GameConstants.GameButtonText_Tap;
 			StartGame();
 		}
-		else if (buttonText is gameButtonText_Tap)
+		else if (buttonText is GameConstants.GameButtonText_Tap)
 		{
 			TapCount++;
 		}
@@ -46,21 +46,32 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		timer.Start();
 	}
 
-	void EndGame(int score)	
+	async Task EndGame(int score)
 	{
-		GameEnded?.Invoke(this, new GameEndedEventArgs(score));
-
-		if (score > tapCountService.TapCountHighScore)
+		try
 		{
-			HighScore = tapCountService.TapCountHighScore = score;
+			CanGameButtonTappedCommandExecute = false;
+
+			GameEnded?.Invoke(this, new GameEndedEventArgs(score));
+
+			if (score > tapCountService.TapCountHighScore)
+			{
+				HighScore = tapCountService.TapCountHighScore = score;
+			}
+
+			TimerSecondsRemaining = GameConstants.GameDuration.Seconds;
+			GameButtonText = GameConstants.GameButtonText_Start;
+
+			await Task.Delay(GameConstants.GameEndPopupDisplayTime.Seconds);
 		}
-		
-		TimerSecondsRemaining = maximumTimerSeconds;
-		GameButtonText = gameButtonText_Start;
+		finally
+		{
+			CanGameButtonTappedCommandExecute = true;
+		}
 	}
 
 
-	void HandleTimerTicked(object? sender, EventArgs e)
+	async void HandleTimerTicked(object? sender, EventArgs e)
 	{
 		TimerSecondsRemaining--;
 
@@ -71,7 +82,7 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 			timer?.Stop();
 			timer = null;
 
-			EndGame(TapCount);
+			await EndGame(TapCount);
 		}
 	}
 }
