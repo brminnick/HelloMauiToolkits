@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Markup;
 using CommunityToolkit.Maui.Views;
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
@@ -7,12 +8,11 @@ namespace HelloMauiToolkits;
 class TapGamePage : BasePage<TapGameViewModel>
 {
 	readonly TapCountService tapCountService;
+	readonly Label highScoreLabel;
 	
 	public TapGamePage(TapGameViewModel viewModel, TapCountService tapCountService) : base(viewModel)
 	{
 		this.tapCountService = tapCountService;
-		
-		Title = "Tap Game";
 
 		viewModel.GameEnded += HandleGameEnded;
 
@@ -29,20 +29,18 @@ class TapGamePage : BasePage<TapGameViewModel>
 			
 			Children =
 			{
-				new Label()
+				new TapGameLabel(36)
 					.Row(Row.HighScore)
-					.Font(size: 36)
-					.TextCenter()
-					.Center()
+					.Assign(out highScoreLabel)
 					.Bind(Label.TextProperty, 
 							static (TapGameViewModel vm) => vm.HighScore, 
 							mode: BindingMode.OneWay, 
 							convert: number => $"High Score: {number}"),
 				
-				new Label { LineBreakMode =  LineBreakMode.WordWrap }
+				new TapGameLabel(24) { LineBreakMode =  LineBreakMode.WordWrap }
 					.Row(Row.Description)
 					.Text("Start the game, then tap the button as many times as you can in 5 seconds!")
-					.Font(size: 24, italic: true)
+					.Font(italic: true)
 					.TextCenter()
 					.Center(),
 				
@@ -61,18 +59,13 @@ class TapGamePage : BasePage<TapGameViewModel>
 							parameterGetter: static (TapGameViewModel vm) => vm.GameButtonText, 
 							parameterBindingMode: BindingMode.OneWay),
 				
-				new Label()
+				new TapGameLabel(24)
 					.Row(Row.TapCounter)
-					.Center()
-					.TextCenter()
-					.Font(size: 24, bold: true)
 					.Bind(Label.TextProperty, 
 							static (TapGameViewModel vm) => vm.TapCount),
 				
-				new Label()
+				new TapGameLabel()
 					.Row(Row.Timer)
-					.Center()
-					.TextCenter()
 					.Bind(Label.TextProperty, 
 							static (TapGameViewModel vm) => vm.TimerSecondsRemaining,
 							mode: BindingMode.OneWay,
@@ -80,23 +73,73 @@ class TapGamePage : BasePage<TapGameViewModel>
 			}
 		};
 	}
-	
-	async void HandleGameEnded(object? sender, GameEndedEventArgs e)
+
+	async void HandleGameEnded(object? gameViewModel, GameEndedEventArgs gameEndedEventArgs)
 	{
-		Popup popup = e.FinalScore switch
+		var isHighScore = gameEndedEventArgs.FinalScore > tapCountService.TapCountHighScore;
+		var gameScoreEmoji = GameConstants.GetScoreEmoji(gameEndedEventArgs.FinalScore, tapCountService.TapCountHighScore);
+
+		Popup popup = isHighScore switch
 		{
-			var score when (score > tapCountService.TapCountHighScore) => new GameEndedPopup("New High Score", 
-																									e.FinalScore,
-																									GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore)),
-			_ => new GameEndedPopup("Game Over",  
-										e.FinalScore,
-										GameConstants.GetScoreEmoji(e.FinalScore, tapCountService.TapCountHighScore))
+			true => new GameEndedPopup("New High Score",
+										gameEndedEventArgs.FinalScore,
+										gameScoreEmoji),
+			false => new GameEndedPopup("Game Over",
+										gameEndedEventArgs.FinalScore,
+										gameScoreEmoji)
 		};
 		
+		popup.Closed += OnGameEndedPopupPopupClosed;
+
 		await this.ShowPopupAsync(popup);
+
+		async void OnGameEndedPopupPopupClosed(object? sender, PopupClosedEventArgs popupClosedEventArgs)
+		{
+			ArgumentNullException.ThrowIfNull(sender);
+			
+			var popup = (Popup)sender;
+			popup.Closed -= OnGameEndedPopupPopupClosed;
+
+			if (!isHighScore)
+				return;
+			
+			await AnimateHighScoreColor(gameEndedEventArgs.FinalScore);
+		}
+	}
+
+	async Task AnimateHighScoreColor(int highScore)
+	{		
+		var highScoreLabelOriginalTextColor = highScoreLabel.TextColor;
+
+		var changeHighScoreLabelTextColorTask = highScoreLabel.TextColorTo(Colors.DarkGreen, length: 50);
+		var scaleHighScoreLabelTask = highScoreLabel.ScaleTo(1.15, 110);
+		var minimumAnimationTimeTask = Task.Delay(GameConstants.GameEndPopupDisplayTime);
+		
+		BindingContext.UpdateHighScoreCommand.Execute(highScore);
+		
+		await Task.WhenAll(changeHighScoreLabelTextColorTask, scaleHighScoreLabelTask);
+		
+		scaleHighScoreLabelTask = highScoreLabel.ScaleTo(1.0, 100);
+
+		await Task.WhenAll(scaleHighScoreLabelTask, minimumAnimationTimeTask);
+		
+		changeHighScoreLabelTextColorTask = highScoreLabel.TextColorTo(highScoreLabelOriginalTextColor, length: 500);
+
+		await changeHighScoreLabelTextColorTask;
 	}
 
 	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
+
+	class TapGameLabel : Label
+	{
+		public TapGameLabel(double? fontSize = null)
+		{
+			this.Center()
+				.TextCenter()
+				.TextColor(ColorConstants.TapGameLabelTextColor)
+				.Font(size: fontSize, bold: true);
+		}
+	}
 
 	class ShadowButton : Button
 	{

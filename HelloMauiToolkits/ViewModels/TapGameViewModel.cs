@@ -34,6 +34,12 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		}
 	}
 
+	[RelayCommand]
+	void UpdateHighScore(int score)
+	{
+		tapCountService.TapCountHighScore = HighScore = score;
+	}
+
 	void StartGame()
 	{
 		var timer = dispatcher.CreateTimer();
@@ -53,11 +59,6 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 			CanGameButtonTappedCommandExecute = false;
 
 			GameEnded?.Invoke(this, new GameEndedEventArgs(score));
-
-			if (score > tapCountService.TapCountHighScore)
-			{
-				HighScore = tapCountService.TapCountHighScore = score;
-			}
 
 			TimerSecondsRemaining = GameConstants.GameDuration.Seconds;
 			GameButtonText = GameConstants.GameButtonText_Start;

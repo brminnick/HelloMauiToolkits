@@ -13,11 +13,6 @@ abstract class BasePage : ContentPage
 	{
 		BindingContext = viewModel;
 		Padding = 12;
-
-		if (string.IsNullOrWhiteSpace(Title))
-		{
-			Title = GetType().Name;
-		}
 	}
 
 	protected override void OnAppearing()
