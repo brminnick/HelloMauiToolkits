@@ -40,9 +40,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 				new TapGameLabel(24) { LineBreakMode =  LineBreakMode.WordWrap }
 					.Row(Row.Description)
 					.Text("How many taps can you get in 5 seconds???")
-					.Font(italic: true)
-					.TextCenter()
-					.Center(),
+					.Font(italic: true),
 				
 				new ShadowButton()
 					.Row(Row.TapButton)
