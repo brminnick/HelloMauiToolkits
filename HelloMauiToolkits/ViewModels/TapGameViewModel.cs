@@ -21,12 +21,15 @@ class TapGameViewModel : BaseViewModel
 		this.dispatcher = dispatcher;
 
 		GameButtonTappedCommand = new Command<string>(GameButtonTapped, _ => CanGameButtonTappedCommandExecute);
+		UpdateHighScoreCommand = new Command<int>(UpdateHighScore, _ => CanGameButtonTappedCommandExecute);
+		
 		HighScore = tapCountService.TapCountHighScore;
 	}
 
 	public event EventHandler<GameEndedEventArgs>? GameEnded;
 
 	public Command GameButtonTappedCommand { get; }
+	public Command UpdateHighScoreCommand { get; }
 
 	public string GameButtonText
 	{
@@ -80,8 +83,6 @@ class TapGameViewModel : BaseViewModel
 			throw new NotSupportedException("Invalid Game State");
 		}
 	}
-
-	[RelayCommand]
 	void UpdateHighScore(int score)
 	{
 		tapCountService.TapCountHighScore = HighScore = score;
