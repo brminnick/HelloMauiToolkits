@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace HelloMauiToolkits;
 
-partial class TapGameViewModel : BaseViewModel
+class TapGameViewModel : BaseViewModel
 {
 	readonly TapCountService tapCountService;
 	readonly IDispatcher dispatcher;
