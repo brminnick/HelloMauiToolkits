@@ -26,9 +26,9 @@ class GameEndedPopup : Popup
 
 		Content = new Border
 		{
-			BackgroundColor = ColorConstants.PopupBackgroundColor,
+			BackgroundColor = ColorConstants.ButtonBackgroundColor,
 			StrokeThickness = 16,
-			Stroke = ColorConstants.PopupBorderColor,
+			Stroke = ColorConstants.ButtonBackgroundColor,
 #if Android
 			StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(40) },
 #endif
@@ -65,7 +65,7 @@ class GameEndedPopup : Popup
 	{
 		public GamedEndedLabel(int fontSize, string text)
 		{
-			this.Text(text, Colors.Black)
+			this.Text(text, Colors.White)
 				.Center()
 				.TextCenter()
 				.Font(size: fontSize);
