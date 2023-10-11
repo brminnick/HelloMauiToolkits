@@ -21,7 +21,7 @@ class TapGameViewModel : BaseViewModel
 		this.dispatcher = dispatcher;
 
 		GameButtonTappedCommand = new Command<string>(GameButtonTapped, _ => CanGameButtonTappedCommandExecute);
-		UpdateHighScoreCommand = new Command<int>(UpdateHighScore, _ => CanGameButtonTappedCommandExecute);
+		UpdateHighScoreCommand = new Command<int>(UpdateHighScore);
 		
 		HighScore = tapCountService.TapCountHighScore;
 	}
