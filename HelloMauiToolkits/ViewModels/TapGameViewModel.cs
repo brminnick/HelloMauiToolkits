@@ -1,24 +1,71 @@
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace HelloMauiToolkits;
 
-partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
+partial class TapGameViewModel : BaseViewModel
 {
-	[ObservableProperty]
-	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = GameConstants.GameDuration.Seconds;
+	readonly TapCountService tapCountService;
+	readonly IDispatcher dispatcher;
 
-	[ObservableProperty]
+	int tapCount, highScore, timerSecondsRemaining = GameConstants.GameDuration.Seconds;
+
 	string gameButtonText = GameConstants.GameButtonText_Start;
 
-	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(GameButtonTappedCommand))]
 	bool canGameButtonTappedCommandExecute = true;
+
+	public TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher)
+	{
+		this.tapCountService = tapCountService;
+		this.dispatcher = dispatcher;
+
+		GameButtonTappedCommand = new Command<string>(GameButtonTapped, _ => CanGameButtonTappedCommandExecute);
+		HighScore = tapCountService.TapCountHighScore;
+	}
 
 	public event EventHandler<GameEndedEventArgs>? GameEnded;
 
-	[RelayCommand(CanExecute = nameof(CanGameButtonTappedCommandExecute))]
-	void GameButtonTapped(string buttonText)
+	public Command GameButtonTappedCommand { get; }
+
+	public string GameButtonText
 	{
+		get => gameButtonText;
+		set => SetProperty(ref gameButtonText, value);
+	}
+
+	public bool CanGameButtonTappedCommandExecute
+	{
+		get => canGameButtonTappedCommandExecute;
+		set
+		{
+			if (SetProperty(ref canGameButtonTappedCommandExecute, value))
+				GameButtonTappedCommand.ChangeCanExecute();
+		}
+	}
+
+	public int TapCount
+	{
+		get => tapCount;
+		set => SetProperty(ref tapCount, value);
+	}
+
+	public int HighScore
+	{
+		get => highScore;
+		set => SetProperty(ref highScore, value);
+	}
+
+	public int TimerSecondsRemaining
+	{
+		get => timerSecondsRemaining;
+		set => SetProperty(ref timerSecondsRemaining, value);
+	}
+
+	void GameButtonTapped(string? buttonText)
+	{
+		ArgumentNullException.ThrowIfNull(buttonText);
+
 		if (buttonText is GameConstants.GameButtonText_Start)
 		{
 			GameButtonText = GameConstants.GameButtonText_Tap;
