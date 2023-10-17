@@ -35,7 +35,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Bind(Label.TextProperty, 
 							static (TapGameViewModel vm) => vm.HighScore, 
 							mode: BindingMode.OneWay, 
-							convert: number => $"High Score: {number}"),
+							convert: static number => $"High Score: {number}"),
 				
 				new TapGameLabel(24) { LineBreakMode =  LineBreakMode.WordWrap }
 					.Row(Row.Description)
@@ -69,7 +69,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Bind(Label.TextProperty, 
 							static (TapGameViewModel vm) => vm.TimerSecondsRemaining,
 							mode: BindingMode.OneWay,
-							convert: seconds => $"Seconds Remaining: {seconds}")
+							convert: static seconds => $"Seconds Remaining: {seconds}")
 			}
 		};
 	}
