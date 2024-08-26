@@ -15,6 +15,8 @@ sealed class GameEndedPopup : Popup
 		const int scoreEmojiFontSize = 64;
 		const int combinedDescriptionLabelEmojiLabelHeight = 175;
 		const int popupWidth = 250;
+		const int padding = 24;
+		const int spacing = 12;
 		
 		var description = $"You scored {score} points!";
 		
@@ -29,13 +31,13 @@ sealed class GameEndedPopup : Popup
 			BackgroundColor = ColorConstants.ButtonBackgroundColor,
 			StrokeThickness = 16,
 			Stroke = ColorConstants.ButtonBackgroundColor,
-#if Android
+// #if Android
 			StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(40) },
-#endif
+// #endif
 			
 			Content = new VerticalStackLayout
 			{
-				Spacing = 12,
+				Spacing = spacing,
 				Children =
 				{
 					new GamedEndedLabel(titleFontSize, title)
@@ -50,8 +52,8 @@ sealed class GameEndedPopup : Popup
 								convert: (double descriptionLabelHeight) => combinedDescriptionLabelEmojiLabelHeight - descriptionLabelHeight,
 								source: descriptionLabel)
 				}
-			}.Size(popupWidth, -1)
-			 .Padding(24)
+			}.Size(popupWidth, 315)
+			 .Padding(padding)
 		};
 	}
 

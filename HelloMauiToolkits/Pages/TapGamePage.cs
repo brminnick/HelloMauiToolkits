@@ -155,6 +155,8 @@ class TapGamePage : BasePage<TapGameViewModel>
 			BorderWidth = 8;
 			BorderColor = ColorConstants.ButtonBorderColor;
 
+			FontSize = 32;
+
 			Clicked += HandleClicked;
 		}
 		
