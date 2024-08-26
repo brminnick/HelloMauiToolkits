@@ -58,12 +58,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
-        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.0.0" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-rc.1.23419.4" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
+        <PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.1.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     </ItemGroup>
 
     <!-- Build Properties must be defined within these property groups to ensure successful publishing

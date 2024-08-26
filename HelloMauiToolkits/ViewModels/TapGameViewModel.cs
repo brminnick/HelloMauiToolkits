@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace HelloMauiToolkits;
-
+		
 partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
 {
 	[ObservableProperty]
@@ -63,7 +63,7 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 			TimerSecondsRemaining = GameConstants.GameDuration.Seconds;
 			GameButtonText = GameConstants.GameButtonText_Start;
 
-			await Task.Delay(GameConstants.GameEndPopupDisplayTime.Seconds);
+			await Task.Delay(TimeSpan.FromSeconds(GameConstants.GameEndPopupDisplayTime.Seconds));
 		}
 		finally
 		{

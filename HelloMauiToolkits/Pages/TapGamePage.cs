@@ -7,12 +7,14 @@ namespace HelloMauiToolkits;
 
 class TapGamePage : BasePage<TapGameViewModel>
 {
-	readonly TapCountService tapCountService;
 	readonly Label highScoreLabel;
+	readonly TapCountService tapCountService;
 	
 	public TapGamePage(TapGameViewModel viewModel, TapCountService tapCountService) : base(viewModel)
 	{
 		this.tapCountService = tapCountService;
+
+		BackgroundColor = Colors.White;
 
 		viewModel.GameEnded += HandleGameEnded;
 
@@ -128,7 +130,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 
 	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
 
-	class TapGameLabel : Label
+	sealed class TapGameLabel : Label
 	{
 		public TapGameLabel(double? fontSize = null)
 		{
@@ -139,7 +141,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 		}
 	}
 
-	class ShadowButton : Button
+	sealed class ShadowButton : Button
 	{
 		public ShadowButton()
 		{
