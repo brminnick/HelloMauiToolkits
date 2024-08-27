@@ -31,9 +31,9 @@ sealed class GameEndedPopup : Popup
 			BackgroundColor = ColorConstants.ButtonBackgroundColor,
 			StrokeThickness = 16,
 			Stroke = ColorConstants.ButtonBackgroundColor,
-// #if Android
+#if Android
 			StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(40) },
-// #endif
+#endif
 			
 			Content = new VerticalStackLayout
 			{
