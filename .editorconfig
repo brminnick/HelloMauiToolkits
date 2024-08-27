@@ -67,7 +67,7 @@ csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
 csharp_style_inlined_variable_declaration = true:suggestion
 csharp_style_throw_expression = true:suggestion
-csharp_style_conditional_delegate_call = true:suggestions
+csharp_style_conditional_delegate_call = true:suggestion
 
 # Naming rules
 
@@ -91,7 +91,6 @@ dotnet_naming_rule.instance_fields_should_be_camel_case.style = instance_field_s
 dotnet_naming_symbols.instance_fields.applicable_kinds = field
 
 dotnet_naming_style.instance_field_style.capitalization = camel_case
-dotnet_naming_style.instance_field_style.required_prefix = 
 
 ## Static fields are camelCase
 dotnet_naming_rule.static_fields_should_be_camel_case.severity = error
@@ -103,7 +102,6 @@ dotnet_naming_symbols.static_fields.required_modifiers = static
 dotnet_naming_symbols.static_fields.applicable_accessibilities = private, protected, protected_internal, private_protected
 
 dotnet_naming_style.static_field_style.capitalization = camel_case
-dotnet_naming_style.static_field_style.required_prefix = 
 
 # Modifier preferences
 csharp_prefer_static_local_function = true:suggestion
