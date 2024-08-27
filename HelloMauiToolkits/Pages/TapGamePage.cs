@@ -35,7 +35,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Row(Row.HighScore)
 					.Assign(out highScoreLabel)
 					.Bind(Label.TextProperty, 
-							static (TapGameViewModel vm) => vm.HighScore, 
+							getter: static (TapGameViewModel vm) => vm.HighScore, 
 							mode: BindingMode.OneWay, 
 							convert: static number => $"High Score: {number}"),
 				
@@ -51,10 +51,10 @@ class TapGamePage : BasePage<TapGameViewModel>
 					.Center()
 					.Size(250,250)
 					.Bind(Button.TextProperty, 
-							static (TapGameViewModel vm) => vm.GameButtonText, 
+							getter: static (TapGameViewModel vm) => vm.GameButtonText, 
 							mode: BindingMode.OneWay)
 					.BindCommand(
-							static (TapGameViewModel vm) => vm.GameButtonTappedCommand, 
+							getter: static (TapGameViewModel vm) => vm.GameButtonTappedCommand, 
 							commandBindingMode: BindingMode.OneTime, 
 							parameterGetter: static (TapGameViewModel vm) => vm.GameButtonText, 
 							parameterBindingMode: BindingMode.OneWay),
@@ -62,12 +62,12 @@ class TapGamePage : BasePage<TapGameViewModel>
 				new TapGameLabel(24)
 					.Row(Row.TapCounter)
 					.Bind(Label.TextProperty, 
-							static (TapGameViewModel vm) => vm.TapCount),
+							getter: static (TapGameViewModel vm) => vm.TapCount),
 				
 				new TapGameLabel()
 					.Row(Row.Timer)
 					.Bind(Label.TextProperty, 
-							static (TapGameViewModel vm) => vm.TimerSecondsRemaining,
+							getter: static (TapGameViewModel vm) => vm.TimerSecondsRemaining,
 							mode: BindingMode.OneWay,
 							convert: static seconds => $"Seconds Remaining: {seconds}")
 			}
