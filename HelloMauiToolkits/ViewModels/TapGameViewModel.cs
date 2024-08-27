@@ -111,7 +111,7 @@ class TapGameViewModel : BaseViewModel
 			TimerSecondsRemaining = GameConstants.GameDuration.Seconds;
 			GameButtonText = GameConstants.GameButtonText_Start;
 
-			await Task.Delay(GameConstants.GameEndPopupDisplayTime.Seconds);
+			await Task.Delay(TimeSpan.FromSeconds(GameConstants.GameEndPopupDisplayTime.Seconds));
 		}
 		finally
 		{

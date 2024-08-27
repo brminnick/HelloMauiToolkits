@@ -1,6 +1,6 @@
 namespace HelloMauiToolkits;
 
-class App : Application
+sealed class App : Application
 {
 	public App(AppShell appShell)
 	{

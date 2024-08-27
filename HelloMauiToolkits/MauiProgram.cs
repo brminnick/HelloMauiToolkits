@@ -37,6 +37,6 @@ public static class MauiProgram
 		where TPage : BasePage<TViewModel>
 		where TViewModel : BaseViewModel
 	{
-		return services.AddTransientWithShellRoute<TPage, TViewModel>($"//{typeof(TPage).Name}");
+		return services.AddTransientWithShellRoute<TPage, TViewModel>($"/{typeof(TPage).Name}");
 	}
 }

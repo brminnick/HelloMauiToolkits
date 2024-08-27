@@ -19,13 +19,13 @@ abstract class BasePage : ContentPage
 	{
 		base.OnAppearing();
 
-		Debug.WriteLine($"OnAppearing: {Title}");
+		Trace.WriteLine($"OnAppearing: {Title}");
 	}
 
 	protected override void OnDisappearing()
 	{
 		base.OnDisappearing();
 
-		Debug.WriteLine($"OnDisappearing: {Title}");
+		Trace.WriteLine($"OnDisappearing: {Title}");
 	}
 }
