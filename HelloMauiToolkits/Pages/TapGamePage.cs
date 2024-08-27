@@ -73,6 +73,8 @@ class TapGamePage : BasePage<TapGameViewModel>
 			}
 		};
 	}
+	
+	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
 
 	async void HandleGameEnded(object? gameViewModel, GameEndedEventArgs gameEndedEventArgs)
 	{
@@ -127,8 +129,6 @@ class TapGamePage : BasePage<TapGameViewModel>
 
 		await changeHighScoreLabelTextColorTask;
 	}
-
-	enum Row { HighScore, Description, TapButton, TapCounter, Timer }
 
 	sealed class TapGameLabel : Label
 	{
