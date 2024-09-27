@@ -86,10 +86,11 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 
 		if (TimerSecondsRemaining is 0)
 		{
-			var timer = sender as IDispatcherTimer;
+			ArgumentNullException.ThrowIfNull(sender);
+			
+			var timer = (IDispatcherTimer)sender;
 
-			timer?.Stop();
-			timer = null;
+			timer.Stop();
 
 			await EndGame(TapCount);
 		}
