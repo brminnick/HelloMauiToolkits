@@ -5,16 +5,24 @@ namespace HelloMauiToolkits;
 		
 partial class TapGameViewModel(TapCountService tapCountService, IDispatcher dispatcher) : BaseViewModel
 {
+	readonly WeakEventManager _gameEndedWeakEventManager = new();
+	readonly TapCountService _tapCountService = tapCountService;
+	readonly IDispatcher _dispatcher = dispatcher;
+	
 	[ObservableProperty]
-	int tapCount, highScore = tapCountService.TapCountHighScore, timerSecondsRemaining = GameConstants.GameDuration.Seconds;
+	int _tapCount, _highScore = tapCountService.TapCountHighScore, _timerSecondsRemaining = GameConstants.GameDuration.Seconds;
 
 	[ObservableProperty]
-	string gameButtonText = GameConstants.GameButtonText_Start;
+	string _gameButtonText = GameConstants.GameButtonText_Start;
 
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(GameButtonTappedCommand))]
-	bool canGameButtonTappedCommandExecute = true;
+	bool _canGameButtonTappedCommandExecute = true;
 
-	public event EventHandler<GameEndedEventArgs>? GameEnded;
+	public event EventHandler<GameEndedEventArgs> GameEnded
+	{
+		add => _gameEndedWeakEventManager.AddEventHandler(value);
+		remove => _gameEndedWeakEventManager.RemoveEventHandler(value);
+	}
 
 	[RelayCommand(CanExecute = nameof(CanGameButtonTappedCommandExecute))]
 	void GameButtonTapped(string buttonText)
@@ -37,12 +45,12 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 	[RelayCommand]
 	void UpdateHighScore(int score)
 	{
-		tapCountService.TapCountHighScore = HighScore = score;
+		_tapCountService.TapCountHighScore = HighScore = score;
 	}
 
 	void StartGame()
 	{
-		var timer = dispatcher.CreateTimer();
+		var timer = _dispatcher.CreateTimer();
 		timer.Interval = TimeSpan.FromSeconds(1);
 
 		timer.Tick += HandleTimerTicked;
@@ -58,7 +66,7 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		{
 			CanGameButtonTappedCommandExecute = false;
 
-			GameEnded?.Invoke(this, new GameEndedEventArgs(score));
+			OnGameEnded(new GameEndedEventArgs(score));
 
 			TimerSecondsRemaining = GameConstants.GameDuration.Seconds;
 			GameButtonText = GameConstants.GameButtonText_Start;
@@ -76,7 +84,7 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 	{
 		TimerSecondsRemaining--;
 
-		if (TimerSecondsRemaining == 0)
+		if (TimerSecondsRemaining is 0)
 		{
 			var timer = sender as IDispatcherTimer;
 
@@ -86,4 +94,6 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 			await EndGame(TapCount);
 		}
 	}
+
+	void OnGameEnded(GameEndedEventArgs eventArgs) => _gameEndedWeakEventManager.HandleEvent(this, eventArgs, nameof(GameEnded));
 }

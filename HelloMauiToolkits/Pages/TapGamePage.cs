@@ -7,12 +7,12 @@ namespace HelloMauiToolkits;
 
 class TapGamePage : BasePage<TapGameViewModel>
 {
-	readonly Label highScoreLabel;
-	readonly TapCountService tapCountService;
+	readonly Label _highScoreLabel;
+	readonly TapCountService _tapCountService;
 	
 	public TapGamePage(TapGameViewModel viewModel, TapCountService tapCountService) : base(viewModel)
 	{
-		this.tapCountService = tapCountService;
+		this._tapCountService = tapCountService;
 
 		BackgroundColor = Colors.White;
 
@@ -33,7 +33,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 			{
 				new TapGameLabel(36)
 					.Row(Row.HighScore)
-					.Assign(out highScoreLabel)
+					.Assign(out _highScoreLabel)
 					.Bind(Label.TextProperty, 
 							getter: static (TapGameViewModel vm) => vm.HighScore, 
 							mode: BindingMode.OneWay, 
@@ -78,8 +78,8 @@ class TapGamePage : BasePage<TapGameViewModel>
 
 	async void HandleGameEnded(object? gameViewModel, GameEndedEventArgs gameEndedEventArgs)
 	{
-		var isHighScore = gameEndedEventArgs.FinalScore > tapCountService.TapCountHighScore;
-		var gameScoreEmoji = GameConstants.GetScoreEmoji(gameEndedEventArgs.FinalScore, tapCountService.TapCountHighScore);
+		var isHighScore = gameEndedEventArgs.FinalScore > _tapCountService.TapCountHighScore;
+		var gameScoreEmoji = GameConstants.GetScoreEmoji(gameEndedEventArgs.FinalScore, _tapCountService.TapCountHighScore);
 
 		Popup popup = isHighScore switch
 		{
@@ -111,21 +111,21 @@ class TapGamePage : BasePage<TapGameViewModel>
 
 	async Task AnimateHighScoreColor(int highScore)
 	{		
-		var highScoreLabelOriginalTextColor = highScoreLabel.TextColor;
+		var highScoreLabelOriginalTextColor = _highScoreLabel.TextColor;
 
-		var changeHighScoreLabelTextColorTask = highScoreLabel.TextColorTo(Colors.DarkGreen, length: 50);
-		var scaleHighScoreLabelTask = highScoreLabel.ScaleTo(1.15, 110);
+		var changeHighScoreLabelTextColorTask = _highScoreLabel.TextColorTo(Colors.DarkGreen, length: 50);
+		var scaleHighScoreLabelTask = _highScoreLabel.ScaleTo(1.15, 110);
 		var minimumAnimationTimeTask = Task.Delay(GameConstants.GameEndPopupDisplayTime);
 		
 		BindingContext.UpdateHighScoreCommand.Execute(highScore);
 		
 		await Task.WhenAll(changeHighScoreLabelTextColorTask, scaleHighScoreLabelTask);
 		
-		scaleHighScoreLabelTask = highScoreLabel.ScaleTo(1.0, 100);
+		scaleHighScoreLabelTask = _highScoreLabel.ScaleTo(1.0, 100);
 
 		await Task.WhenAll(scaleHighScoreLabelTask, minimumAnimationTimeTask);
 		
-		changeHighScoreLabelTextColorTask = highScoreLabel.TextColorTo(highScoreLabelOriginalTextColor, length: 500);
+		changeHighScoreLabelTextColorTask = _highScoreLabel.TextColorTo(highScoreLabelOriginalTextColor, length: 500);
 
 		await changeHighScoreLabelTextColorTask;
 	}
