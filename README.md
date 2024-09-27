@@ -1,3 +1,5 @@
+[![.NET MAUI](https://github.com/brminnick/HelloMauiToolkits/actions/workflows/maui.yml/badge.svg)](https://github.com/brminnick/HelloMauiToolkits/actions/workflows/maui.yml)
+
 # HelloMauiToolkits
 A .NET MAUI sample created to demonstrate the power of `CommunityToolkit.Mvvm`, `CommunityToolkit.Maui` and `CommunityToolkit.Maui.Markup`
 
