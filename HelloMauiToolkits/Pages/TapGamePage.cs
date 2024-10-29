@@ -12,7 +12,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 	
 	public TapGamePage(TapGameViewModel viewModel, TapCountService tapCountService) : base(viewModel)
 	{
-		this._tapCountService = tapCountService;
+		_tapCountService = tapCountService;
 
 		BackgroundColor = Colors.White;
 

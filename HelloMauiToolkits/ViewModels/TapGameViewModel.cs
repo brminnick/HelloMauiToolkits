@@ -79,7 +79,6 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 		}
 	}
 
-
 	async void HandleTimerTicked(object? sender, EventArgs e)
 	{
 		TimerSecondsRemaining--;

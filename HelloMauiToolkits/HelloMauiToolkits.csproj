@@ -24,7 +24,7 @@
         <ApplicationTitle>HelloMauiToolkits</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.hellomauitoolkits</ApplicationId>
+        <ApplicationId>com.minnick.hellomauitoolkits</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -69,11 +69,11 @@
 
     <!-- Build Properties must be defined within these property groups to ensure successful publishing
        to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
-    <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst' and '$(Configuration)' == 'Debug'">
         <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(TargetFramework.EndsWith('-maccatalyst')) and '$(Configuration)' == 'Release'">
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst' and '$(Configuration)' == 'Release'">
         <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
         <UseHardenedRuntime>true</UseHardenedRuntime>
     </PropertyGroup>
