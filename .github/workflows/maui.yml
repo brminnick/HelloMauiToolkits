@@ -104,6 +104,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '17'
+
       - name: Install .NET MAUI Workload
         run: |
           dotnet workload install maui
