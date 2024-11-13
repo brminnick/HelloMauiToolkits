@@ -64,7 +64,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.93" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.93" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     </ItemGroup>
 
     <!-- Build Properties must be defined within these property groups to ensure successful publishing
