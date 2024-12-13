@@ -8,21 +8,27 @@ partial class TapGameViewModel(TapCountService tapCountService, IDispatcher disp
 	readonly WeakEventManager _gameEndedWeakEventManager = new();
 	readonly TapCountService _tapCountService = tapCountService;
 	readonly IDispatcher _dispatcher = dispatcher;
-	
-	[ObservableProperty]
-	int _tapCount, _highScore = tapCountService.TapCountHighScore, _timerSecondsRemaining = GameConstants.GameDuration.Seconds;
-
-	[ObservableProperty]
-	string _gameButtonText = GameConstants.GameButtonText_Start;
-
-	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(GameButtonTappedCommand))]
-	bool _canGameButtonTappedCommandExecute = true;
 
 	public event EventHandler<GameEndedEventArgs> GameEnded
 	{
 		add => _gameEndedWeakEventManager.AddEventHandler(value);
 		remove => _gameEndedWeakEventManager.RemoveEventHandler(value);
 	}
+
+	[ObservableProperty]
+	public partial int TapCount { get; private set; }
+
+	[ObservableProperty]
+	public partial int HighScore { get; private set; }= tapCountService.TapCountHighScore;
+
+	[ObservableProperty]
+	public partial int TimerSecondsRemaining { get; private set; }= GameConstants.GameDuration.Seconds;
+
+	[ObservableProperty]
+	public partial string GameButtonText { get; private set; }= GameConstants.GameButtonText_Start;
+
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(GameButtonTappedCommand))]
+	public partial bool CanGameButtonTappedCommandExecute { get; private set; } = true;
 
 	[RelayCommand(CanExecute = nameof(CanGameButtonTappedCommandExecute))]
 	void GameButtonTapped(string buttonText)
