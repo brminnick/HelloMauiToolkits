@@ -1,6 +1,6 @@
 namespace HelloMauiToolkits;
 
-sealed class App(AppShell appShell) : Application
+sealed partial class App(AppShell appShell) : Application
 {
 	readonly AppShell _appShell = appShell;
 

@@ -6,7 +6,7 @@ using LayoutAlignment = Microsoft.Maui.Primitives.LayoutAlignment;
 
 namespace HelloMauiToolkits;
 
-sealed class GameEndedPopup : Popup
+sealed partial class GameEndedPopup : Popup
 {
 	public GameEndedPopup(string title, int score, string scoreEmoji)
 	{
@@ -63,7 +63,7 @@ sealed class GameEndedPopup : Popup
 		await CloseAsync();
 	}
 
-	sealed class GamedEndedLabel : Label
+	sealed partial class GamedEndedLabel : Label
 	{
 		public GamedEndedLabel(int fontSize, string text)
 		{

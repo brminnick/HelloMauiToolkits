@@ -5,7 +5,7 @@ using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 
 namespace HelloMauiToolkits;
 
-class TapGamePage : BasePage<TapGameViewModel>
+partial class TapGamePage : BasePage<TapGameViewModel>
 {
 	readonly Label _highScoreLabel;
 	readonly TapCountService _tapCountService;
@@ -130,7 +130,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 		await changeHighScoreLabelTextColorTask;
 	}
 
-	sealed class TapGameLabel : Label
+	sealed partial class TapGameLabel : Label
 	{
 		public TapGameLabel(double? fontSize = null)
 		{
@@ -141,7 +141,7 @@ class TapGamePage : BasePage<TapGameViewModel>
 		}
 	}
 
-	sealed class ShadowButton : Button
+	sealed partial class ShadowButton : Button
 	{
 		public ShadowButton()
 		{

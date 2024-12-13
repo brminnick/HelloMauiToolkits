@@ -1,6 +1,6 @@
 namespace HelloMauiToolkits;
 
-sealed class AppShell : Shell
+sealed partial class AppShell : Shell
 {
 	public AppShell(TapGamePage tapGamePage)
 	{
